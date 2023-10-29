@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
         - name: posts
-          image: oriolsastre/posts:0.0.2
+          image: oriolsastre/posts
