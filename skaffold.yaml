@@ -1,0 +1,63 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  # Quan inicia skaffold inicia aquests fitxers
+  # Quan es modifica un fitxer, actualitzar els objectes associats
+  # Quan s'apaga skaffold, eliminar els objectes associats a aquests fitxers
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    # Si hi ha un canvi en un fitxer .js de client, el copiarà directament dins del pod
+    # Si el canvi no és de .js, recrearà de nou tota la imatge. Per exemple, si s'instal·la una dependència nova.
+    - image: oriolsastre/client
+      context: client #Directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.js"
+            dest: .
+    - image: oriolsastre/comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: oriolsastre/event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: oriolsastre/moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: oriolsastre/posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: oriolsastre/query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
